@@ -624,7 +624,7 @@ void test_detector(char *datacfg, char *cfgfile, char *weightfile, char *filenam
         if (nms) do_nms_obj(boxes, probs, l.w*l.h*l.n, l.classes, nms);
         //else if (nms) do_nms_sort(boxes, probs, l.w*l.h*l.n, l.classes, nms);
 
-		draw_detections(im, l.w * l.h * l.n, thresh, boxes, probs, masks, names, alphabet, l.classes);
+        draw_detections(im, l.w * l.h * l.n, thresh, boxes, probs, masks, names, alphabet, l.classes);
 
         if(outfile){
             save_image(im, outfile);
@@ -697,10 +697,10 @@ void run_detector(int argc, char **argv)
     char *weights = (argc > 5) ? argv[5] : 0;
     char *filename = (argc > 6) ? argv[6]: 0;
 
-	if (0 == strcmp(argv[2], "test"))
-	{
-		test_detector(datacfg, cfg, weights, filename, thresh, hier_thresh, outfile, fullscreen);
-	}
+    if (0 == strcmp(argv[2], "test"))
+    {
+        test_detector(datacfg, cfg, weights, filename, thresh, hier_thresh, outfile, fullscreen);
+    }
     else if(0==strcmp(argv[2], "train")) train_detector(datacfg, cfg, weights, gpus, ngpus, clear);
     else if(0==strcmp(argv[2], "valid")) validate_detector(datacfg, cfg, weights, outfile);
     else if(0==strcmp(argv[2], "valid2")) validate_detector_flip(datacfg, cfg, weights, outfile);

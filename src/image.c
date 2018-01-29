@@ -155,33 +155,34 @@ void draw_box(image a, int x1, int y1, int x2, int y2, float r, float g, float b
     }
 }
 
-void draw_box_width(image a, int x1, int y1, int x2, int y2, int w, float r, float g, float b)
+void draw_box_width(image a, int x1, int y1, int x2, int y2, int w, float r,
+        float g, float b)
 {
-	int i;
+    int i;
 
-	/* w == bounding box (the number of pixels) -forever */
-	w = 1;
-	/* w == bounding box (the number of pixels) -strong */
+    /* w == bounding box (the number of pixels) -forever */
+    w = 1;
+    /* w == bounding box (the number of pixels) -strong */
 
-	for (i = 0; i < w; ++i)
-	{
-		draw_box(a, x1 + i, y1 + i, x2 - i, y2 - i, r, g, b);
-	}
+    for (i = 0; i < w; ++i)
+    {
+        draw_box(a, x1 + i, y1 + i, x2 - i, y2 - i, r, g, b);
+    }
 }
 
 void draw_bbox(image a, box bbox, int w, float r, float g, float b)
 {
-	int left = (bbox.x - bbox.w / 2) * a.w;
-	int right = (bbox.x + bbox.w / 2) * a.w;
-	int top = (bbox.y - bbox.h / 2) * a.h;
-	int bot = (bbox.y + bbox.h / 2) * a.h;
+    int left = (bbox.x - bbox.w / 2) * a.w;
+    int right = (bbox.x + bbox.w / 2) * a.w;
+    int top = (bbox.y - bbox.h / 2) * a.h;
+    int bot = (bbox.y + bbox.h / 2) * a.h;
 
-	int i;
+    int i;
 
-	for (i = 0; i < w; ++i)
-	{
-		draw_box(a, left + i, top + i, right - i, bot - i, r, g, b);
-	}
+    for (i = 0; i < w; ++i)
+    {
+        draw_box(a, left + i, top + i, right - i, bot - i, r, g, b);
+    }
 }
 
 image **load_alphabet()
@@ -241,8 +242,8 @@ void draw_detections(image im, int num, float thresh, box *boxes, float **probs,
             if(top < 0) top = 0;
             if(bot > im.h-1) bot = im.h-1;
 
-			/* width == bounding box (the number of pixels) */
-			draw_box_width(im, left, top, right, bot, width, red, green, blue);
+            /* width == bounding box (the number of pixels) */
+            draw_box_width(im, left, top, right, bot, width, red, green, blue);
 
             if (alphabet) {
                 image label = get_label(alphabet, names[class], (im.h*.03)/10);
