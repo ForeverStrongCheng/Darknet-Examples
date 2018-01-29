@@ -434,9 +434,12 @@ int main(int argc, char **argv)
         run_super(argc, argv);
     } else if (0 == strcmp(argv[1], "lsd")){
         run_lsd(argc, argv);
-    } else if (0 == strcmp(argv[1], "detector")){
-        run_detector(argc, argv);
-    } else if (0 == strcmp(argv[1], "detect")){
+	}
+	else if (0 == strcmp(argv[1], "detector"))
+	{
+		run_detector(argc, argv);
+	}
+	else if (0 == strcmp(argv[1], "detect")){
         float thresh = find_float_arg(argc, argv, "-thresh", .24);
         char *filename = (argc > 4) ? argv[4]: 0;
         char *outfile = find_char_arg(argc, argv, "-out", 0);

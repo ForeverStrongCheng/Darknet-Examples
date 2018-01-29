@@ -121,6 +121,7 @@ void draw_box(image a, int x1, int y1, int x2, int y2, float r, float g, float b
 {
     //normalize_image(a);
     int i;
+
     if(x1 < 0) x1 = 0;
     if(x1 >= a.w) x1 = a.w-1;
     if(x2 < 0) x2 = 0;
@@ -141,6 +142,7 @@ void draw_box(image a, int x1, int y1, int x2, int y2, float r, float g, float b
         a.data[i + y1*a.w + 2*a.w*a.h] = b;
         a.data[i + y2*a.w + 2*a.w*a.h] = b;
     }
+
     for(i = y1; i <= y2; ++i){
         a.data[x1 + i*a.w + 0*a.w*a.h] = r;
         a.data[x2 + i*a.w + 0*a.w*a.h] = r;
@@ -155,23 +157,31 @@ void draw_box(image a, int x1, int y1, int x2, int y2, float r, float g, float b
 
 void draw_box_width(image a, int x1, int y1, int x2, int y2, int w, float r, float g, float b)
 {
-    int i;
-    for(i = 0; i < w; ++i){
-        draw_box(a, x1+i, y1+i, x2-i, y2-i, r, g, b);
-    }
+	int i;
+
+	/* w == bounding box (the number of pixels) -forever */
+	w = 1;
+	/* w == bounding box (the number of pixels) -strong */
+
+	for (i = 0; i < w; ++i)
+	{
+		draw_box(a, x1 + i, y1 + i, x2 - i, y2 - i, r, g, b);
+	}
 }
 
 void draw_bbox(image a, box bbox, int w, float r, float g, float b)
 {
-    int left  = (bbox.x-bbox.w/2)*a.w;
-    int right = (bbox.x+bbox.w/2)*a.w;
-    int top   = (bbox.y-bbox.h/2)*a.h;
-    int bot   = (bbox.y+bbox.h/2)*a.h;
+	int left = (bbox.x - bbox.w / 2) * a.w;
+	int right = (bbox.x + bbox.w / 2) * a.w;
+	int top = (bbox.y - bbox.h / 2) * a.h;
+	int bot = (bbox.y + bbox.h / 2) * a.h;
 
-    int i;
-    for(i = 0; i < w; ++i){
-        draw_box(a, left+i, top+i, right-i, bot-i, r, g, b);
-    }
+	int i;
+
+	for (i = 0; i < w; ++i)
+	{
+		draw_box(a, left + i, top + i, right - i, bot - i, r, g, b);
+	}
 }
 
 image **load_alphabet()
@@ -194,7 +204,8 @@ void draw_detections(image im, int num, float thresh, box *boxes, float **probs,
 {
     int i;
 
-    for(i = 0; i < num; ++i){
+    for(i = 0; i < num; ++i)
+    {
         int class = max_index(probs[i], classes);
         float prob = probs[i][class];
         if(prob > thresh){
@@ -230,12 +241,15 @@ void draw_detections(image im, int num, float thresh, box *boxes, float **probs,
             if(top < 0) top = 0;
             if(bot > im.h-1) bot = im.h-1;
 
-            draw_box_width(im, left, top, right, bot, width, red, green, blue);
+			/* width == bounding box (the number of pixels) */
+			draw_box_width(im, left, top, right, bot, width, red, green, blue);
+
             if (alphabet) {
                 image label = get_label(alphabet, names[class], (im.h*.03)/10);
                 draw_label(im, top + width, left, label, rgb);
                 free_image(label);
             }
+
             if (masks){
                 image mask = float_to_image(14, 14, 1, masks[i]);
                 image resized_mask = resize_image(mask, b.w*im.w, b.h*im.h);
