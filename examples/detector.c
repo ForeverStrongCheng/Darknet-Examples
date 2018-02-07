@@ -137,6 +137,9 @@ void train_detector(char *datacfg, char *cfgfile, char *weightfile, int *gpus, i
             save_weights(net, buff);
         }
 
+        /* source code - darknet */
+//        if (i % 10000 == 0 || (i < 1000 && i % 100 == 0))
+
         if (i % 10000 == 0 || (i < 1000 && i % 100 == 0))
         {
 #ifdef GPU
