@@ -61,9 +61,15 @@ void train_detector(char *datacfg, char *cfgfile, char *weightfile, int *gpus, i
     while(get_current_batch(net) < net.max_batches)
     {
         if(l.random && count++%10 == 0){
+
             printf("Resizing\n");
             int dim = (rand() % 10 + 10) * 32;
-            if (get_current_batch(net)+200 > net.max_batches) dim = 608;
+
+            if (get_current_batch(net) + 200 > net.max_batches)
+            {
+                dim = 608;
+            }
+
             //int dim = (rand() % 4 + 16) * 32;
             printf("%d\n", dim);
             args.w = dim;
@@ -121,8 +127,13 @@ void train_detector(char *datacfg, char *cfgfile, char *weightfile, int *gpus, i
 #else
         loss = train_network(net, train);
 #endif
-        if (avg_loss < 0) avg_loss = loss;
-        avg_loss = avg_loss*.9 + loss*.1;
+
+        if (avg_loss < 0)
+        {
+            avg_loss = loss;
+        }
+
+        avg_loss = avg_loss * .9 + loss * .1;
 
         i = get_current_batch(net);
         printf("%ld: %f, %f avg, %f rate, %lf seconds, %d images\n", get_current_batch(net), loss, avg_loss, get_current_rate(net), sec(clock()-time), i*imgs);
@@ -616,7 +627,7 @@ void test_detector(char *datacfg, char *cfgfile, char *weightfile, char *filenam
 //    float nms = .3;
 
     /* nms (non-maximum suppression) -forever */
-    float nms = .5;
+    float nms = .3;
     /* nms (non-maximum suppression) -strong */
 
     while(1){
@@ -740,7 +751,10 @@ void run_detector(int argc, char **argv)
         validate_detector(datacfg, cfg, weights, outfile);
     }
     else if(0==strcmp(argv[2], "valid2")) validate_detector_flip(datacfg, cfg, weights, outfile);
-    else if(0==strcmp(argv[2], "recall")) validate_detector_recall(cfg, weights);
+    else if (0 == strcmp(argv[2], "recall"))
+    {
+        validate_detector_recall(cfg, weights);
+    }
     else if(0==strcmp(argv[2], "demo")) {
         list *options = read_data_cfg(datacfg);
         int classes = option_find_int(options, "classes", 20);
